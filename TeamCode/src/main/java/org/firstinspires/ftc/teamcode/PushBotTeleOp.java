@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.utilities.Hardware;
+
 @TeleOp(name="PushBotTeleOp", group="Drive")
 public class PushBotTeleOp extends LinearOpMode {
 
@@ -74,8 +76,6 @@ public class PushBotTeleOp extends LinearOpMode {
 
         double armSpeed = 1.0;
 
-//        double liftPosition = 0.0;
-
 
         boolean dpadUp;
 
@@ -102,9 +102,6 @@ public class PushBotTeleOp extends LinearOpMode {
         boolean isBPSUp = true;
 
         boolean isFPSUp = true;
-
-        // Is Position Back Board Correct?
-        boolean isPosBBC = false;
 
         while (opModeIsActive()) {
 
@@ -147,26 +144,6 @@ public class PushBotTeleOp extends LinearOpMode {
             a = gamepad2.a;
             b = gamepad2.b;
 
-            // Gamepad 1 Code
-//            telemetry.addData("Right Front", robot.DSRF.getDistance(DistanceUnit.INCH));
-//            telemetry.addData("Left Front", robot.DSLF.getDistance(DistanceUnit.INCH));
-//            if (gamepad1.right_trigger > 0 && (robot.DSRF.getDistance(DistanceUnit.INCH) <= 6 || robot.DSLF.getDistance(DistanceUnit.INCH) <= 6))
-//            {
-//                if (robot.DSRF.getDistance(DistanceUnit.INCH) > 2 && robot.DSLF.getDistance(DistanceUnit.INCH) > 2)
-//                    {
-//                        speed = 0.3;
-//                        isPosBBC = false;
-//                    }
-//                else
-//                {
-//                    speed = 0.5;
-//                    isPosBBC = true;
-//                }
-//            }
-//            else {
-//                speed = 1.0;
-//                isPosBBC = false;
-//            }
 
             if(gamepad1.a)
 
@@ -348,53 +325,15 @@ public class PushBotTeleOp extends LinearOpMode {
                 robot.AP.setPosition(1);
             }
 
-
             double FLDp = lefty + leftx;
             double FRDp = righty - rightx;
             double BLDp = lefty - leftx;
             double BRDp = righty + rightx;
 
-            // Gamepad 1
-//            if (isPosBBC) {
-//                if ((FLDp > 0 && BRDp > 0 && FRDp < 0 && BLDp < 0) || FLDp < 0 && BRDp < 0 && FRDp > 0 && BLDp > 0)
-//                {
-//                    robot.FLD.setPower(speed * FLDp);
-//
-//                    robot.FRD.setPower(speed * FRDp);
-//
-//                    robot.BLD.setPower(speed * BLDp);
-//
-//                    robot.BRD.setPower(speed * BRDp);
-//                }
-//            }
-//            else {
-//                robot.FLD.setPower(speed * FLDp);
-//
-//                robot.FRD.setPower(speed * FRDp);
-//
-//                robot.BLD.setPower(speed * BLDp);
-//
-//                robot.BRD.setPower(speed * BRDp);
-//            }
-
             robot.FLD.setPower(speed * FLDp);
-
             robot.FRD.setPower(speed * FRDp);
-
             robot.BLD.setPower(speed * BLDp);
-
             robot.BRD.setPower(speed * BRDp);
-            // Gamepad 2
-
-//            if (liftPosition + armSpeed*armPower >= 0) {
-//
-//                liftPosition += armPower*armSpeed;
-//
-//                robot.LL.setPower(armSpeed*armPower);
-//
-//                robot.RL.setPower(armSpeed*armPower);
-//
-//            }
 
             robot.IN.setPower(intakeSpeed*intakeSpeedMultiplier);
             robot.LL.setPower(armSpeed*armPower);
