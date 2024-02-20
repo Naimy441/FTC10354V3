@@ -17,10 +17,6 @@ import org.openftc.easyopencv.OpenCvWebcam;
 @Autonomous
 public class DriveOpMode extends LinearOpMode {
     final OpenCvCameraRotation CAMERA_ROTATION = OpenCvCameraRotation.UPSIDE_DOWN;
-    public Hardware robot = new Hardware();
-    public static final int FRONT_X = -36;
-    public static final int BACK_X = 12;
-    public static final double Y = 63.7845;
 
     /**
      * LinearOpMode requires a runOpMode function, but this method should be overridden in all other scripts that use DriveOpMode.
@@ -82,6 +78,7 @@ public class DriveOpMode extends LinearOpMode {
 
     public boolean[] initWithController(boolean park)
     {
+        boolean blueSide = true;
         boolean dropYellowPixel = true;
         boolean parkInside = park;
 
@@ -103,16 +100,29 @@ public class DriveOpMode extends LinearOpMode {
                 parkInside = false;
             }
 
-            // Press right bumper when you are done initializing.
+            if (gamepad1.dpad_up) {
+                blueSide = true;
+            }
+
+            if (gamepad1.dpad_down) {
+                blueSide = false;
+            }
+
+            telemetry.addLine("Press right bumper to end initialization.");
+            telemetry.addLine("blueSide: up -> true, down -> false");
             telemetry.addLine("dropYellowPixel: x - > true, y -> false");
             telemetry.addLine("parkInside: a - > true, b -> false");
+            telemetry.addLine(" ");
+            telemetry.addData("blueSide", blueSide);
+            telemetry.addLine(" ");
             telemetry.addData("dropYellowPixel", dropYellowPixel);
+            telemetry.addLine(" ");
             telemetry.addData("parkInside", parkInside);
             telemetry.update();
 
             sleep(50);
         }
 
-        return new boolean[]{dropYellowPixel, parkInside};
+        return new boolean[]{blueSide, dropYellowPixel, parkInside};
     }
 }

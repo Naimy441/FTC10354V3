@@ -69,8 +69,8 @@ public class Hardware {
         BLD.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BRD.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        LL.setDirection(DcMotorEx.Direction.FORWARD);
-        RL.setDirection(DcMotorEx.Direction.REVERSE);
+        LL.setDirection(DcMotorEx.Direction.REVERSE);
+        RL.setDirection(DcMotorEx.Direction.FORWARD);
         IN.setDirection(DcMotorEx.Direction.REVERSE);
     }
 

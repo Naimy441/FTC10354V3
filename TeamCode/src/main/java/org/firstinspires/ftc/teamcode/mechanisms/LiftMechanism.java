@@ -33,23 +33,32 @@ public class LiftMechanism {
     }
 
     public class Lift implements Action {
-        private final double ticksPerInch = 83.34;
-        private double power;
-        private double ticksToMove;
+        private double power = 0;
+        private double ticksToMove = 0;
+        private long endTime = 0;
 
-        public Lift(double power, double inches) {
+        public Lift(double power, double inches, long secondsToWait) {
+            double ticksPerInch = 83.34;
+
             this.power = power;
-            ticksToMove = (int) (inches * ticksPerInch);
+            this.ticksToMove = (int) (inches * ticksPerInch);
 
             LL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
             RL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
             LL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
             RL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+            this.endTime = System.currentTimeMillis() + secondsToWait * 1000;
         }
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
+            if (System.currentTimeMillis() < endTime)
+            {
+                return true;
+            }
+
             if (Math.abs(LL.getCurrentPosition()) < ticksToMove && Math.abs(RL.getCurrentPosition()) < ticksToMove) {
                 RL.setPower(power);
                 LL.setPower(power);
@@ -61,8 +70,12 @@ public class LiftMechanism {
         }
     }
 
-    public Action lift(double power, double inches) {
-        return new Lift(power, inches);
+    public Action liftUp(double power, double inches, long secondsToWait) {
+        return new Lift(power, inches, secondsToWait);
+    }
+
+    public Action liftDown(double power, double inches, long secondsToWait) {
+        return new Lift(-power, inches, secondsToWait);
     }
 
     public class SwivelOut implements Action {
