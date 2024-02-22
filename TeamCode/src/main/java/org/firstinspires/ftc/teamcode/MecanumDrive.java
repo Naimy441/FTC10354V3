@@ -58,29 +58,43 @@ public final class MecanumDrive {
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
                 RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
+        // NEW Drive Constants
+        public double MAX_RPM = 435;
+        public double GEAR_RATIO = 1;
+        public double ENCODER_RESOLUTION = 2000;
+        public double WHEEL_RADIUS = 1.8898;
+        public double TRACK_WIDTH = 15.503937;
+        public double PARALLEL_ODO_WHEEL_WIDTH = 11.625;
+        public double PERPENDICULAR_ODO_WHEEL_OFFSET = 5.5;
+
         // drive model parameters
-        public double inPerTick = 192 / 64562.5;
+        public double inPerTick = (WHEEL_RADIUS * Math.PI) / ENCODER_RESOLUTION;
         public double lateralInPerTick = 0.0024890453118500883;
-        public double trackWidthTicks = 5000;
+        public double trackWidthTicks = TRACK_WIDTH / inPerTick;
+
+        // deadwheels positions from center
+        public double par0YTicks = (PARALLEL_ODO_WHEEL_WIDTH / 2) / inPerTick; // y position of the first parallel encoder (in tick units)
+        public double par1YTicks = -par0YTicks; // y position of the second parallel encoder (in tick units)
+        public double perpXTicks = PERPENDICULAR_ODO_WHEEL_OFFSET / inPerTick; // x position of the perpendicular encoder (in tick units)
 
         // feedforward parameters (in tick units)
         public double kS = 1.0753997955283804;
-        public double kV = 0.0003910004300440746;
-        public double kA = 0.0001250034134131231;
+        public double kV = 0.0003910004300440;
+        public double kA = 0.0001250034134131;
 
         // path profile parameters (in inches)
-        public double maxWheelVel = 50;
-        public double minProfileAccel = -30;
-        public double maxProfileAccel = 50;
+        public double maxProfileAccel = ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85;
+        public double minProfileAccel = -maxProfileAccel * 0.6;
+        public double maxWheelVel = maxProfileAccel * 0.9;
 
         // turn profile parameters (in radians)
-        public double maxAngVel = Math.PI; // shared with path
-        public double maxAngAccel = Math.PI;
+        public double maxAngVel = Math.toRadians(202.40481); // shared with path
+        public double maxAngAccel = Math.toRadians(167.05832);
 
         // path controller gains
         public double axialGain = 0.0;
         public double lateralGain = 0.0;
-        public double headingGain = 0.01725; // shared with turn
+        public double headingGain = 0; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
